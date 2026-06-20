@@ -9,6 +9,8 @@
 
 int main(void) {
     char expression[1024];
+    char command[1024];
+    
     if (fgets(expression, sizeof(expression), stdin) == NULL) {
         return 1;
     }
@@ -16,6 +18,8 @@ int main(void) {
     if (len > 0 && expression[len - 1] == '\n') {
         expression[len - 1] = '\0';
     }
+
+    snprintf(command, sizeof(command), "print(%s)", expression);
 
     char *python_args[] = {
         "python3",
