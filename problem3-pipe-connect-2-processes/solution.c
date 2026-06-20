@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     }
 
     int pipefd[2];
-    pid_t pid1 = fork();
+    pipe(pipefd);
 
     if (fork() == 0) {
         close(pipefd[0]);
