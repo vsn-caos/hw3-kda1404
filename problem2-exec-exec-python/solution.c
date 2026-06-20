@@ -24,7 +24,7 @@ int main(void) {
     char *python_args[] = {
         "python3",
         "-c",
-        expression,
+        command,
         NULL
     };
 
