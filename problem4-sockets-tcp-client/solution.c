@@ -23,6 +23,31 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(atoi(argv[2]));
+    inet_aton(argv[1], &addr.sin_addr);
+    
+    connect(sock, (struct sockaddr*)&addr, sizeof(addr));
+
+    int32_t number;
+    while (scanf("%d", &number) == 1) {
+        write(sock, &number, sizeof(number));
+        
+        int32_t response;
+        ssize_t bytes = read(sock, &response, sizeof(response));
+        
+        if (bytes == 0) {
+            close(sock);
+            return 0;
+        }
+        printf("%d\n", response);
+    }
+    
+    close(sock);
+
     // TODO: создайте TCP-сокет (AF_INET, SOCK_STREAM),
     //       заполните struct sockaddr_in с помощью inet_aton/inet_pton,
     //       подключитесь через connect,
