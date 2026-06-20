@@ -15,6 +15,32 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    int pipefd[2];
+    pipe(pipefd);
+
+    if (fork() == 0) {
+        close(pipefd[0]);
+        dup2(pipefd[1], 1);
+        close(pipefd[1]);
+        execlp(argv[1], argv[1], NULL);
+        exit(1);
+    }
+
+    if (fork() == 0) {
+        close(pipefd[1]);
+        dup2(pipefd[0], 0);
+        close(pipefd[0]);
+        execlp(argv[2], argv[2], NULL);
+        exit(1);
+    }
+    
+    close(pipefd[0]);
+    close(pipefd[1]);
+    
+    wait(NULL);
+    wait(NULL);
+    
+
     // TODO: создайте канал (pipe),
     //       запустите CMD1 (argv[1]) так, чтобы его stdout → write-конец канала,
     //       запустите CMD2 (argv[2]) так, чтобы его stdin  ← read-конец канала,
